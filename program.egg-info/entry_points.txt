@@ -1,0 +1,3 @@
+[console_scripts]
+diatools-min = diatools.dia_min:diatools_min
+

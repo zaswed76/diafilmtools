@@ -3,6 +3,11 @@ README.rst
 setup.py
 diatools/__init__.py
 diatools/dia_min.py
+diatools/files_tool.py
+diatools/image_tool.py
+examples/__init__.py
+examples/parser.py
+examples/testre.py
 program.egg-info/PKG-INFO
 program.egg-info/SOURCES.txt
 program.egg-info/dependency_links.txt

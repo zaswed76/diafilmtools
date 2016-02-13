@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from os.path import join, dirname
 
 import diatools
@@ -16,7 +18,7 @@ setup(
         install_requires=[],
         entry_points={
             'console_scripts':
-                ['diatools-min = diatools.dia_min:diatools_min']
+                ['diatools-min = diatools.dia_min:main']
         }
 
 )

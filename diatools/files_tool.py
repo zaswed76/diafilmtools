@@ -44,3 +44,17 @@ def files_for_thumbnails(directory, ext_lst=None):
 
 def len_dir(dir):
     return len(os.listdir(dir))
+
+
+def ext_list(directory):
+    exts = set()
+    for root, dirs, files in os.walk(directory):
+        for name in files:
+            fullname = os.path.join(root,
+                                    name)  # получаем полное имя файла
+            exts.add(os.path.splitext(fullname)[1])
+    return exts
+
+
+if __name__ == '__main__':
+    print(ext_list("/home/vostro/temp/dia"))

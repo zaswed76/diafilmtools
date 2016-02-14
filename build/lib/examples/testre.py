@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-a = True
-b = True
-
-print(a is b)
+import os
+p = './'
+print(os.path.abspath(p))
+print(os.path.join(p, "www"))

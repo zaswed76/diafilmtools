@@ -40,6 +40,8 @@ def files_for_thumbnails(source_dir, target_dir, size, resample, data,
     :param ext_lst: list < str [ext1, ext2, ...]
     :return: list < str  полные пути к файлам
     """
+
+    source_dir = os.path.abspath(source_dir)
     data_old = data
     data_new = dict()
 
@@ -51,6 +53,10 @@ def files_for_thumbnails(source_dir, target_dir, size, resample, data,
         source_file = join(d,
                            first_img(sorted(os.listdir(d)), ext_lst))
         name_file = path_to_name(source_file)
+
+        dia_dir = os.path.join(source_dir,
+                                   name_file)
+
         target_file = os.path.join(target_dir,
                                    name_file + default_ext)
         if name_file not in data_old:
@@ -59,7 +65,8 @@ def files_for_thumbnails(source_dir, target_dir, size, resample, data,
                                        source_file=source_file,
                                        target_file=target_file,
                                        size=size,
-                                       resample=resample)
+                                       resample=resample,
+                                       dia_dir=dia_dir)
     data_old.update(data_new)
     return data_old, data_new
 

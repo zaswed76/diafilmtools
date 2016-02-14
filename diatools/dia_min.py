@@ -77,7 +77,7 @@ def main():
                                                          arg.resample,
                                                          db_obj.load(),
                                                          ext_lst=arg.valid_ext_file)
-    print(arg.write_mode)
+
     if arg.write_mode:
         data = data_new
     else:

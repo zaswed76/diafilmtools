@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
-
 from PIL import Image
 
 
@@ -34,18 +32,8 @@ def thumbnail(source, target, size, resample=2):
     img.save(target)
 
 
-def thumbnail_seq(source_lst, target_dir, size, resample=2, append="",
-                  default_ext=None):
-    if default_ext is None:
-        default_ext = DEFAULT_EXT
-    if not os.path.isdir(target_dir):
-        os.makedirs(target_dir)
-        print("был создан каталог - {}".format(target_dir))
-    for s_path in progress(source_lst):
-        name = os.path.basename(
-            os.path.dirname(s_path)) + append + default_ext
-        target_path = os.path.join(target_dir, name)
-        thumbnail(s_path, target_path, size, resample)
-        if printer:
-            print("создан файл - {}".format(target_path))
-    return
+def thumbnail_seq(**kwargs):
+    for key, v in kwargs.items():
+        thumbnail(v['source_file'], v['target_file'], v['size'],
+                  resample=v['resample'])
+        print(key)

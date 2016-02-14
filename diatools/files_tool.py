@@ -3,10 +3,13 @@
 
 import os
 import re
+import pickle
 
 join = os.path.join
 
 IMAGEEXTS = ['png', 'jpg', 'jpeg']
+DEFAULT_EXT = '.jpg'
+
 
 def first_img(names_lst, ext_lst=None):
     """
@@ -16,8 +19,6 @@ def first_img(names_lst, ext_lst=None):
     :param ext_lst: list < str [ext1, ext2, ...]
     :return: str первое совпадение с концом строки
     """
-    if ext_lst is None:
-        ext_lst = IMAGEEXTS
     s = "|".join(ext_lst)
     ext_pattern = re.compile('{}$'.format(s), re.IGNORECASE)
     for n in names_lst:
@@ -25,21 +26,42 @@ def first_img(names_lst, ext_lst=None):
             return n
 
 
-def files_for_thumbnails(directory, ext_lst=None):
+def path_to_name(path):
+    return os.path.basename(os.path.dirname(path))
+
+
+def files_for_thumbnails(source_dir, target_dir, size, resample, data,
+                         ext_lst=None, default_ext=DEFAULT_EXT):
     """
 
     каталог должен содержать каталоги с файлами
     с одним уровнем вложенности
-    :param directory: str путь к каталогу с диафильмами
+    :param source_dir: str путь к каталогу с диафильмами
     :param ext_lst: list < str [ext1, ext2, ...]
     :return: list < str  полные пути к файлам
     """
-    lst = []
-    for dn in sorted(os.listdir(directory)):
-        d = join(directory, dn)
-        lst.append(
-            join(d, first_img(sorted(os.listdir(d)), ext_lst)))
-    return lst
+    data_old = data
+    data_new = dict()
+
+    if ext_lst is None:
+        ext_lst = IMAGEEXTS
+
+    for dn in sorted(os.listdir(source_dir)):
+        d = join(source_dir, dn)
+        source_file = join(d,
+                           first_img(sorted(os.listdir(d)), ext_lst))
+        name_file = path_to_name(source_file)
+        target_file = os.path.join(target_dir,
+                                   name_file + default_ext)
+        if name_file not in data_old:
+            data_new[name_file] = dict(source_dir=source_dir,
+                                       target_dir=target_dir,
+                                       source_file=source_file,
+                                       target_file=target_file,
+                                       size=size,
+                                       resample=resample)
+    data_old.update(data_new)
+    return data_old, data_new
 
 
 def len_dir(dir):
@@ -56,5 +78,36 @@ def ext_list(directory):
     return exts
 
 
+def create_db(source_dir, target_dir, size_min, resample):
+    pass
+
+class Pickle:
+    def __init__(self, path):
+        self.path = path
+
+    def load(self):
+        try:
+            with open(self.path, 'rb') as f:
+                return pickle.load(f)
+        except FileNotFoundError:
+            return dict()
+
+    def save(self, data):
+        with open(self.path, 'wb') as f:
+            pickle.dump(data, f)
+
+
+
 if __name__ == '__main__':
-    print(ext_list("/home/vostro/temp/dia"))
+    s = "/home/vostro/temp/dia"
+    t = "/home/vostro/temp/min"
+    db_file = "/home/vostro/temp/min/db.pkl"
+    db_obj = Pickle(db_file)
+    db = db_obj.load()
+    d = files_for_thumbnails(s, t, 200, 3, db)
+    db_obj.save(d[0])
+    print(len(d[0]))
+    print(len(d[1]))
+
+
+

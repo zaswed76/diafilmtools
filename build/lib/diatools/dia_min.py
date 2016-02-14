@@ -28,24 +28,17 @@ def arg_parser():
                         help='''файл с допустимыми расширениями,
                         перечисленными каждое с новой строки''')
 
-    parser.add_argument('-a', '--append', default="",
+    parser.add_argument('-app', '--append', default="",
                         help=''' добавить к имени миниатюры''')
 
     parser.add_argument('-e', '--default_ext',
                         help=''' расширение для сохранения''')
+
+    parser.add_argument('-m', '--write_mode', action='store_false',
+                        help=''' если указать этот ключ то файлы будут
+                        перезаписаны''')
+
     return parser
-
-
-def create_miniature(source, target, size, resample=2, ext_list=None,
-                     append="", default_ext=None):
-    first_files_lst = files_tool.files_for_thumbnails(source,
-                                                      ext_list)
-    image_tool.thumbnail_seq(first_files_lst, target,
-                             size, resample,
-                             append=append,
-                             default_ext=default_ext)
-    len_dir = files_tool.len_dir(source)
-    return (len(first_files_lst), len_dir)
 
 
 def create_config(dir):
@@ -62,6 +55,11 @@ def main():
     valid_ext_file = arg.valid_ext_file
     append = arg.append
     default_ext = arg.default_ext
+    write_mode = arg.write_mode
+
+
+
+
 
     if not os.path.isdir(arg.diadir):
         raise FileError("каталог {} - не найден !".format(arg.diadir))
@@ -79,7 +77,13 @@ def main():
                                                          arg.resample,
                                                          db_obj.load(),
                                                          ext_lst=arg.valid_ext_file)
-    image_tool.thumbnail_seq(**data_new)
+    print(arg.write_mode)
+    if arg.write_mode:
+        data = data_new
+    else:
+        data = data_all
+
+    image_tool.thumbnail_seq(**data)
     db_obj.save(data_all)
 
 

@@ -4,19 +4,6 @@
 from PIL import Image
 
 
-def _progress(lst):
-    return lst
-
-
-printer = False
-try:
-    from tqdm import tqdm
-
-    progress = tqdm
-except:
-    progress = _progress
-    printer = True
-
 RESAMPLE_NUM = [
     Image.NEAREST,
     Image.BILINEAR,
@@ -33,7 +20,7 @@ def thumbnail(source, target, size, resample=2):
 
 
 def thumbnail_seq(**kwargs):
-    for key, v in kwargs.items():
+    for image_name, v in kwargs.items():
         thumbnail(v['source_file'], v['target_file'], v['size'],
                   resample=v['resample'])
-        print(key)
+        print("добавлен", image_name)

@@ -15,7 +15,7 @@ class FileError(Exception): pass
 
 def arg_parser():
     parser = argparse.ArgumentParser(
-            description='коротко о программе')
+            description='создаёт миниатюры в указанном каталоге')
     parser.add_argument('diadir',
                         help='путь к каталогу с дифаильмами')
     parser.add_argument('target',

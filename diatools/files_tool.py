@@ -9,6 +9,18 @@ join = os.path.join
 
 IMAGEEXTS = ['png', 'jpg', 'jpeg']
 DEFAULT_EXT = '.jpg'
+DATA_FILE_NAME = "data.pkl"
+
+
+def collect_files_by_extensions(directory, ext_lst):
+    lst = []
+    files_lst = [os.path.join(directory, p) for p in os.listdir(directory)]
+    s = "|".join(ext_lst)
+    ext_pattern = re.compile('{}$'.format(s), re.IGNORECASE)
+    for n in files_lst:
+        if re.search(ext_pattern, n) is not None:
+            lst.append(n)
+    return lst
 
 
 def first_img(names_lst, ext_lst=None):

@@ -3,6 +3,7 @@ README.rst
 setup.py
 diatools/__init__.py
 diatools/dia_min.py
+diatools/dia_replace.py
 diatools/display.py
 diatools/files_tool.py
 diatools/image_tool.py

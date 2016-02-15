@@ -1,4 +1,5 @@
 [console_scripts]
 diatools-min = diatools.dia_min:main
+diatools-replace = diatools.dia_replace:main
 diatools-show = diatools.display:main
 

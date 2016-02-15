@@ -7,7 +7,6 @@ from setuptools import setup, find_packages
 
 setup(
         name="program",
-        # в __init__ пакета
         version=diatools.__version__,
         packages=find_packages(
                 exclude=["*.exemple", "*.exemple.*", "exemple.*",

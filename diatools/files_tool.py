@@ -2,9 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import os
-import sys
-import re
 import pickle
+import re
 
 join = os.path.join
 
@@ -37,27 +36,29 @@ def files_for_thumbnails(source_dir, target_dir, size, resample, data,
                          update=False):
     """
 
-    каталог должен содержать каталоги с файлами
-    с одним уровнем вложенности
-    :param source_dir: str путь к каталогу с диафильмами
-    :param ext_lst: list < str [ext1, ext2, ...]
-    :return: list < str  полные пути к файлам
+    :param source_dir:
+    :param target_dir:
+    :param size:
+    :param resample: int choices (0, 1, 2, 3) - сглаживание
+    :param data: dict конфигурационный файл описывающий уже существующие миниатюры
+    :param ext_lst: допустимые расширения
+    :param default_ext:
+    :param overwrite:
+    :param update:
+    :return: tuple < (dict, dict)
+    !!! две точки выхода
     """
-
     source_dir = os.path.abspath(source_dir)
     data_old = data
     data_new = dict()
-
 
     if ext_lst is None:
         ext_lst = IMAGEEXTS
 
     if update:
         for name, opt_dict in data_old.items():
-            opt_dict.update(dict(size=size,resample=resample))
+            opt_dict.update(dict(size=size, resample=resample))
         return data_old, data_old
-
-
 
     for dn in sorted(os.listdir(source_dir)):
 
@@ -67,27 +68,29 @@ def files_for_thumbnails(source_dir, target_dir, size, resample, data,
         name_file = path_to_name(source_file)
 
         dia_dir = os.path.join(source_dir,
-                                   name_file)
+                               name_file)
 
         target_file = os.path.join(target_dir,
                                    name_file + default_ext)
 
+        # todo требуется рефакторинг
+
         if overwrite:
             data_new[name_file] = dict(source_dir=source_dir,
-                                           target_dir=target_dir,
-                                           source_file=source_file,
-                                           target_file=target_file,
-                                           size=size,
-                                           resample=resample,
-                                           dia_dir=dia_dir)
+                                       target_dir=target_dir,
+                                       source_file=source_file,
+                                       target_file=target_file,
+                                       size=size,
+                                       resample=resample,
+                                       dia_dir=dia_dir)
         elif name_file not in data_old:
             data_new[name_file] = dict(source_dir=source_dir,
-                                           target_dir=target_dir,
-                                           source_file=source_file,
-                                           target_file=target_file,
-                                           size=size,
-                                           resample=resample,
-                                           dia_dir=dia_dir)
+                                       target_dir=target_dir,
+                                       source_file=source_file,
+                                       target_file=target_file,
+                                       size=size,
+                                       resample=resample,
+                                       dia_dir=dia_dir)
 
     data_old.update(data_new)
     return data_old, data_new
@@ -98,6 +101,12 @@ def len_dir(dir):
 
 
 def ext_list(directory):
+
+    """
+    получить список расширений всех файлов в директории
+    :param directory:
+    :return:
+    """
     exts = set()
     for root, dirs, files in os.walk(directory):
         for name in files:
@@ -105,10 +114,6 @@ def ext_list(directory):
                                     name)  # получаем полное имя файла
             exts.add(os.path.splitext(fullname)[1])
     return exts
-
-
-def create_db(source_dir, target_dir, size_min, resample):
-    pass
 
 class Pickle:
     def __init__(self, path):
@@ -126,11 +131,7 @@ class Pickle:
             pickle.dump(data, f)
 
 
-
 if __name__ == '__main__':
     data_f = '/home/vostro/Изображения/diafilms/data.pkl'
     dobj = Pickle(data_f)
     print(dobj.load())
-
-
-

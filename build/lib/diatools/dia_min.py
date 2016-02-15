@@ -46,6 +46,11 @@ def arg_parser():
                         перезаписаны с новыми параметрами,
                         но НЕ УДАЛЕНЫ, в случае удаления самого диафильма''')
 
+    parser.add_argument('-u', '--update', action='store_true',
+                        help=''' если указать этот ключ то миниатюры будут
+                         обновлены исходя из данных путей старой базы,
+                         но с новыми параметрами''')
+
     return parser
 
 
@@ -85,10 +90,12 @@ def main():
                                                          arg.resample,
                                                          db_obj.load(),
                                                          ext_lst=arg.valid_ext_file,
-                                                         overwrite=arg.write_mode)
+                                                         overwrite=arg.write_mode,
+                                                         update=arg.update)
 
 
     image_tool.thumbnail_seq(**data_new)
+
     db_obj.save(data_all)
 
 

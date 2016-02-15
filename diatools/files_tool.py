@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 import re
 import pickle
 
@@ -32,7 +33,8 @@ def path_to_name(path):
 
 def files_for_thumbnails(source_dir, target_dir, size, resample, data,
                          ext_lst=None, default_ext=DEFAULT_EXT,
-                         overwrite=False):
+                         overwrite=False,
+                         update=False):
     """
 
     каталог должен содержать каталоги с файлами
@@ -46,10 +48,19 @@ def files_for_thumbnails(source_dir, target_dir, size, resample, data,
     data_old = data
     data_new = dict()
 
+
     if ext_lst is None:
         ext_lst = IMAGEEXTS
 
+    if update:
+        for name, opt_dict in data_old.items():
+            opt_dict.update(dict(size=size,resample=resample))
+        return data_old, data_old
+
+
+
     for dn in sorted(os.listdir(source_dir)):
+
         d = join(source_dir, dn)
         source_file = join(d,
                            first_img(sorted(os.listdir(d)), ext_lst))
@@ -60,6 +71,7 @@ def files_for_thumbnails(source_dir, target_dir, size, resample, data,
 
         target_file = os.path.join(target_dir,
                                    name_file + default_ext)
+
         if overwrite:
             data_new[name_file] = dict(source_dir=source_dir,
                                            target_dir=target_dir,
@@ -78,7 +90,6 @@ def files_for_thumbnails(source_dir, target_dir, size, resample, data,
                                            dia_dir=dia_dir)
 
     data_old.update(data_new)
-
     return data_old, data_new
 
 

@@ -7,6 +7,8 @@ import os
 
 from diatools import files_tool, image_tool
 
+# todo добавить опцию обновления
+
 DATA_FILE_NAME = "data.pkl"
 
 
@@ -15,7 +17,11 @@ class FileError(Exception): pass
 
 def arg_parser():
     parser = argparse.ArgumentParser(
-            description='создаёт миниатюры в указанном каталоге')
+            description='''создаёт миниатюры в указанном каталоге.
+            По умолчанию скрипт работает только на добавление,
+            см. опцию - --write_mode
+
+            ''')
     parser.add_argument('diadir',
                         help='путь к каталогу с дифаильмами')
     parser.add_argument('target',
@@ -34,9 +40,11 @@ def arg_parser():
     parser.add_argument('-e', '--default_ext',
                         help=''' расширение для сохранения''')
 
-    parser.add_argument('-m', '--write_mode', action='store_false',
-                        help=''' если указать этот ключ то файлы будут
-                        перезаписаны''')
+    # если не указан то возвращается False
+    parser.add_argument('-m', '--write_mode', action='store_true',
+                        help=''' если указать этот ключ то МИНИАТЮРЫ будут
+                        перезаписаны с новыми параметрами,
+                        но НЕ УДАЛЕНЫ, в случае удаления самого диафильма''')
 
     return parser
 
@@ -76,14 +84,11 @@ def main():
                                                          arg.size,
                                                          arg.resample,
                                                          db_obj.load(),
-                                                         ext_lst=arg.valid_ext_file)
+                                                         ext_lst=arg.valid_ext_file,
+                                                         overwrite=arg.write_mode)
 
-    if arg.write_mode:
-        data = data_new
-    else:
-        data = data_all
 
-    image_tool.thumbnail_seq(**data)
+    image_tool.thumbnail_seq(**data_new)
     db_obj.save(data_all)
 
 

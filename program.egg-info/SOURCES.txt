@@ -1,7 +1,6 @@
 MANIFEST.in
 README.rst
 setup.py
-setup_display.py
 diatools/__init__.py
 diatools/dia_min.py
 diatools/display.py

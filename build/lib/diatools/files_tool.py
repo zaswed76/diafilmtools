@@ -31,7 +31,8 @@ def path_to_name(path):
 
 
 def files_for_thumbnails(source_dir, target_dir, size, resample, data,
-                         ext_lst=None, default_ext=DEFAULT_EXT):
+                         ext_lst=None, default_ext=DEFAULT_EXT,
+                         overwrite=False):
     """
 
     каталог должен содержать каталоги с файлами
@@ -59,15 +60,25 @@ def files_for_thumbnails(source_dir, target_dir, size, resample, data,
 
         target_file = os.path.join(target_dir,
                                    name_file + default_ext)
-        if name_file not in data_old:
+        if overwrite:
             data_new[name_file] = dict(source_dir=source_dir,
-                                       target_dir=target_dir,
-                                       source_file=source_file,
-                                       target_file=target_file,
-                                       size=size,
-                                       resample=resample,
-                                       dia_dir=dia_dir)
+                                           target_dir=target_dir,
+                                           source_file=source_file,
+                                           target_file=target_file,
+                                           size=size,
+                                           resample=resample,
+                                           dia_dir=dia_dir)
+        elif name_file not in data_old:
+            data_new[name_file] = dict(source_dir=source_dir,
+                                           target_dir=target_dir,
+                                           source_file=source_file,
+                                           target_file=target_file,
+                                           size=size,
+                                           resample=resample,
+                                           dia_dir=dia_dir)
+
     data_old.update(data_new)
+
     return data_old, data_new
 
 
@@ -106,15 +117,9 @@ class Pickle:
 
 
 if __name__ == '__main__':
-    s = "/home/vostro/temp/dia"
-    t = "/home/vostro/temp/min"
-    db_file = "/home/vostro/temp/min/db.pkl"
-    db_obj = Pickle(db_file)
-    db = db_obj.load()
-    d = files_for_thumbnails(s, t, 200, 3, db)
-    db_obj.save(d[0])
-    print(len(d[0]))
-    print(len(d[1]))
+    data_f = '/home/vostro/Изображения/diafilms/data.pkl'
+    dobj = Pickle(data_f)
+    print(dobj.load())
 
 
 

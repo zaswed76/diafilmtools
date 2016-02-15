@@ -31,7 +31,6 @@ def get_diafilm(miniature_path):
     db_obj = files_tool.Pickle(db_file)
     data = db_obj.load()
     dia_dir =data[name]['dia_dir']
-    print(dia_dir)
     return dia_dir
 
 def run_diafilm(display, diafilm):

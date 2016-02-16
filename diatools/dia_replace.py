@@ -11,7 +11,7 @@ from PyQt5.QtCore import pyqtSignal
 from diatools import files_tool
 
 SIZE_IMAGE = 250
-COLUMNS = 3
+MARGIN = 20
 
 
 
@@ -44,17 +44,17 @@ def get_diafilm_dir(miniature_path, ):
 class Cell(QtWidgets.QLabel):
     click = pyqtSignal(str)
 
-    def __init__(self, path_image=None):
+    def __init__(self, size, path_image=None):
         super().__init__()
         self.path_image = path_image
         if path_image is not None:
-            pixmap = QtGui.QPixmap(path_image).scaled(SIZE_IMAGE,
-                                                      SIZE_IMAGE,
+            pixmap = QtGui.QPixmap(path_image).scaled(size,
+                                                      size,
                                                       1, 1)
             self.setPixmap(pixmap)
         else:
-            self.setFixedWidth(SIZE_IMAGE)
-            self.setFixedHeight(SIZE_IMAGE/1.3)
+            self.setFixedWidth(size)
+            self.setFixedHeight(size)
             self.setStyleSheet("background-color: lightgrey")
 
     def mousePressEvent(self, QMouseEvent):
@@ -71,21 +71,24 @@ class DisplayGrid(QtWidgets.QLabel):
 
 
 
-    def create_grid(self, img_lst):
-        lines = int(len(img_lst) / COLUMNS + 1)
-        height = lines * SIZE_IMAGE
+    def create_grid(self, img_lst, column, img_size):
+        lines = int(len(img_lst) / column + 1)
+        width = column * img_size + ((column -1) * MARGIN)
+        print(column, img_size, width)
+        height = lines * img_size
+
         n = 0
         for x in range(lines):
-            for y in range(COLUMNS):
+            for y in range(column):
                 try:
                     img = img_lst[n]
                     n += 1
                 except IndexError:
                     img = None
-                label = Cell(img)
+                label = Cell(img_size, img)
                 # label.click.connect(self.change_image)
                 self.grid.addWidget(label, x, y)
-        return height
+        return width, height
 
 
 class Widget(QtWidgets.QFrame):
@@ -100,17 +103,20 @@ class Widget(QtWidgets.QFrame):
         box.addWidget(self.scroll)
         self.scroll.setWidget(self.display)
 
-        self.setFixedWidth(910)
+
+
+
+
+
+    def create_grid(self, lst, column, size):
+        width, height = self.display.create_grid(lst, column, size)
+        self.display.setFixedSize(width, height)
+        print(width)
+        self.setFixedWidth(width + 100)
         self.setMinimumHeight(600)
 
-
-
-    def set_text(self, lst):
-        height = self.display.create_grid(lst)
-        self.display.setFixedSize(900, height)
-
     def change_image(self, path):
-        create_miniature(path, 240)
+        # create_miniature(path, 240)
         self.close()
 
 
@@ -121,7 +127,7 @@ def main():
     arg = parser.parse_args()
     path = arg.miniature
     text = get_diafilm_dir(path)
-    wind.set_text(text)
+    wind.create_grid(text, 3, 200)
     wind.show()
     sys.exit(app.exec_())
 

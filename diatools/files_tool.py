@@ -11,16 +11,19 @@ IMAGEEXTS = ['png', 'jpg', 'jpeg']
 DEFAULT_EXT = '.jpg'
 DATA_FILE_NAME = "data.pkl"
 
-
-def collect_files_by_extensions(directory, ext_lst):
-    lst = []
-    files_lst = [os.path.join(directory, p) for p in os.listdir(directory)]
+def ext_pattern(ext_lst):
     s = "|".join(ext_lst)
-    ext_pattern = re.compile('{}$'.format(s), re.IGNORECASE)
-    for n in files_lst:
-        if re.search(ext_pattern, n) is not None:
-            lst.append(n)
+    return re.compile('{}$'.format(s), re.IGNORECASE)
+
+def collect_files_by_extensions(directory, ext_lst, sort=False, reverse=False):
+    files_lst = [os.path.join(directory, p) for p in os.listdir(directory)]
+    pattern = ext_pattern(ext_lst)
+    lst = [n for n in files_lst if pattern.search(n)]
+    if sort:
+        lst.sort(reverse=reverse)
     return lst
+
+
 
 
 def first_img(names_lst, ext_lst=None):
@@ -31,10 +34,9 @@ def first_img(names_lst, ext_lst=None):
     :param ext_lst: list < str [ext1, ext2, ...]
     :return: str первое совпадение с концом строки
     """
-    s = "|".join(ext_lst)
-    ext_pattern = re.compile('{}$'.format(s), re.IGNORECASE)
+    pattern = ext_pattern(ext_lst)
     for n in names_lst:
-        if re.search(ext_pattern, n) is not None:
+        if re.search(pattern, n) is not None:
             return n
 
 

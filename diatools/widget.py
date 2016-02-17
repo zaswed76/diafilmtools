@@ -3,8 +3,12 @@
 
 
 import sys
+import math
 
 from PyQt5 import QtWidgets
+
+def get_number_of_lines(leng, col):
+    return math.ceil(leng / col)
 
 
 class Cell(QtWidgets.QLabel):
@@ -15,15 +19,17 @@ class Cell(QtWidgets.QLabel):
 
 
 class Grid(QtWidgets.QFrame):
-    def __init__(self, lst, spacing, margins):
+    def __init__(self, columns, lines, spacing):
         super().__init__()
-        self.lst = lst
+
+        self.columns = columns
+        self.lines = lines
         box = QtWidgets.QVBoxLayout(self)
-        box.setContentsMargins(0, 0, 0, 0)
+        box.setContentsMargins(20, 20, 20, 20)
         box.setSpacing(0)
 
         self.grid = QtWidgets.QGridLayout()
-        self.grid.setContentsMargins(*margins)
+        self.grid.setContentsMargins(0, 0, 0, 0)
         self.grid.setSpacing(spacing)
 
         box.addLayout(self.grid)
@@ -31,8 +37,8 @@ class Grid(QtWidgets.QFrame):
 
     def create_grid(self):
         cell = dict()
-        for x in range(23):
-            for y in range(3):
+        for x in range(self.lines):
+            for y in range(self.columns):
                 cell[(x, y)] = Cell(str((x, y)))
                 self.grid.addWidget(cell[(x, y)], x, y)
 
@@ -43,28 +49,25 @@ class Grid(QtWidgets.QFrame):
 
 
 class Widget(QtWidgets.QFrame):
-    def __init__(self):
+    def __init__(self, lst):
         super().__init__()
+        self.lst = lst
         self.resize(500, 500)
+        self.default_column = 4
         box = self.box(0, (0, 0, 0, 0), self)
-        self.block_flag = True
+
 
         self.scroll = QtWidgets.QScrollArea()
         self.scroll.setWidgetResizable(True)
         box.addWidget(self.scroll)
-        self.update_grid(3)
+        lines = get_number_of_lines(len(self.lst), self.default_column)
+        self.update_grid(self.default_column, lines, 30)
 
-    def update_grid(self, c):
-        self.grid = Grid(c)
+    def update_grid(self, columns, lines, spacing):
+        self.grid = Grid(columns, lines, spacing)
         self.scroll.setWidget(self.grid)
 
-    def resizeEvent(self, QResizeEvent):
-        size = QResizeEvent.size()
-        w, h = size.width(), size.width()
-        if self.block_flag:
-            if w > 900:
-                self.update_grid(4)
-                self.block_flag = False
+
 
     def box(self, spacin, margin, parent):
         box = QtWidgets.QVBoxLayout(parent)
@@ -76,6 +79,6 @@ class Widget(QtWidgets.QFrame):
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     # app.setStyleSheet(open('./etc/{0}.qss'.format('style'), "r").read())
-    main = Widget()
+    main = Widget(range(20))
     main.show()
     sys.exit(app.exec_())

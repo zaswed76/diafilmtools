@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import math
@@ -55,12 +54,6 @@ class TableModel:
     def width_wind(self, width):
         self._width_wind = width
 
-table = TableModel(400, 100, 10)
-
-def resize(width):
-    table.width_wind = width
-    columns = table.columns
-    lines = table.lines
 
 if __name__ == '__main__':
     pass

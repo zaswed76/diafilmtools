@@ -18,9 +18,9 @@ setup(
         install_requires=[],
         entry_points={
             'console_scripts':
-                ['diatools-min = diatools.dia_min:main',
-                 'diatools-show = diatools.display:main',
-                 'diatools-replace = diatools.dia_replace:main'
+                ['dia-min = diatools.dia_min:main',
+                 'dia-show = diatools.dia_show:main',
+                 'dia-replace = diatools.dia_replace:main'
                  ]
         }
 

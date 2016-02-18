@@ -7,11 +7,13 @@ import math
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtCore import pyqtSignal
 
-from diatools import image_tool
+from diatools.lib import image_tool
 
 SPACING = 30
 DEFAULT_COLUMN = 4
 SIZE_IMAGE = 250
+MARGING = (20, 20, 20, 20)
+GRID_MARGING = (0, 0, 0, 0)
 
 def get_number_of_lines(leng, col):
     return math.ceil(leng / col)
@@ -35,19 +37,18 @@ class Cell(QtWidgets.QLabel):
 
 
 class Grid(QtWidgets.QFrame):
-    def __init__(self, parent, file_list, columns, lines, spacing):
+    def __init__(self, parent, file_list, lines):
         super().__init__()
         self.parent = parent
         self.file_list = file_list
-        self.columns = columns
         self.lines = lines
         box = QtWidgets.QVBoxLayout(self)
-        box.setContentsMargins(20, 20, 20, 20)
+        box.setContentsMargins(*MARGING)
         box.setSpacing(0)
 
         self.grid = QtWidgets.QGridLayout()
-        self.grid.setContentsMargins(0, 0, 0, 0)
-        self.grid.setSpacing(spacing)
+        self.grid.setContentsMargins(*GRID_MARGING)
+        self.grid.setSpacing(SPACING)
 
         box.addLayout(self.grid)
         self.create_grid()
@@ -56,7 +57,7 @@ class Grid(QtWidgets.QFrame):
         n = 0
         cell = dict()
         for x in range(self.lines):
-            for y in range(self.columns):
+            for y in range(DEFAULT_COLUMN):
                 try:
                     cell[(x, y)] = Cell(self.file_list[n])
                 except IndexError:
@@ -79,10 +80,10 @@ class Widget(QtWidgets.QFrame):
         self.scroll.setWidgetResizable(True)
         box.addWidget(self.scroll)
         lines = get_number_of_lines(len(self.file_lst), DEFAULT_COLUMN)
-        self.update_grid(self.file_lst, DEFAULT_COLUMN, lines, SPACING)
+        self.update_grid(self.file_lst, lines)
 
-    def update_grid(self, lst, columns, lines, spacing):
-        self.grid = Grid(self, lst, columns, lines, spacing)
+    def update_grid(self, lst, lines):
+        self.grid = Grid(self, lst, lines)
         self.scroll.setWidget(self.grid)
 
     @property

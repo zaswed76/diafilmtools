@@ -5,7 +5,7 @@
 import argparse
 import os
 
-from diatools import files_tool, image_tool
+from diatools.lib import files_tool, image_tool
 
 
 DATA_FILE_NAME = files_tool.DATA_FILE_NAME

@@ -7,8 +7,7 @@ import sys
 
 from PyQt5 import QtWidgets
 
-from diatools import files_tool
-from diatools import min_ggrid
+from diatools.lib import files_tool, min_ggrid
 
 SIZE_IMAGE = 250
 MARGIN = 20
@@ -34,7 +33,6 @@ def get_diafilm_data(miniature_path):
     diafilm = data[dia_name]['dia_dir']
     size = data[dia_name]['size']
     resample = data[dia_name]['resample']
-
 
     files = files_tool.collect_files_by_extensions(diafilm,
                                                    files_tool.IMAGEEXTS,

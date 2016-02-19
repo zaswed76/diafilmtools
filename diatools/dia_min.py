@@ -7,7 +7,6 @@ import os
 
 from diatools.lib import files_tool, image_tool
 
-
 DATA_FILE_NAME = files_tool.DATA_FILE_NAME
 
 
@@ -60,18 +59,6 @@ def create_config(dir):
 def main():
     parser = arg_parser()
     arg = parser.parse_args()
-    diadir = arg.diadir
-    target = arg.target
-    size = arg.size
-    resample = arg.resample
-    valid_ext_file = arg.valid_ext_file
-    append = arg.append
-    default_ext = arg.default_ext
-    write_mode = arg.write_mode
-
-
-
-
 
     if not os.path.isdir(arg.diadir):
         raise FileError("каталог {} - не найден !".format(arg.diadir))

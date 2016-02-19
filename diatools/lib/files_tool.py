@@ -9,7 +9,7 @@ join = os.path.join
 
 IMAGEEXTS = ['png', 'jpg', 'jpeg']
 DEFAULT_EXT = '.jpg'
-DATA_FILE_NAME = "data.pkl"
+DATA_FILE_NAME = ".data.pkl"
 
 def ext_pattern(ext_lst):
     s = "|".join(ext_lst)

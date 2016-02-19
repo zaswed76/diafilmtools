@@ -20,6 +20,7 @@ def arg_parser():
             ''')
     parser.add_argument('miniature',
                         help='путь к миниаюре', type=str)
+
     return parser
 
 
@@ -47,6 +48,7 @@ def main():
     arg = parser.parse_args()
     path = arg.miniature
     files, size, resample = get_diafilm_data(path)
+    files = files[:9]
     wind = min_ggrid.Widget(files, path, size, resample)
     wind.show()
     wind.setMinimumWidth(wind.recommended_size)

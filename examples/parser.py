@@ -1,23 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import argparse
 
+import re
 
-def arg_parser():
-    parser = argparse.ArgumentParser(
-        description='коротко о программе')
-    parser.add_argument('diadir',
-                        help='путь к каталогу с дифаильмами')
-    parser.add_argument('target',
-                        help='куда сохранять миниатюры')
-    parser.add_argument('size', help='размер миниатюры')
-    parser.add_argument('-r', dest='resample', default=2,
-                        choices=['0', '1', '2', '3'], help='''сглаживание целое число 0 - 3
-    чем больше тем качественей но дольше''')
-    return parser
+t = "Андрюшкины игрушки (1900).jpg"
 
-if __name__ == '__main__':
-    parser = arg_parser()
-    namespace = parser.parse_args()
-    print(namespace)
+p = re.compile('Андрюшкины игрушки \(1900\).jpg')
+
+print(p.search(t))

@@ -27,6 +27,7 @@ def collect_files_by_extensions(directory, ext_lst, sort=False, reverse=False):
 
 
 def first_img(names_lst, ext_lst=None):
+    # todo add compile
     """
     получает список строк и возвращает первую совпавшую с одним из расщирений
     список names_lst может быть отсортирован

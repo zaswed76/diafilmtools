@@ -20,7 +20,8 @@ setup(
             'console_scripts':
                 ['dia-min = diatools.dia_min:main',
                  'dia-show = diatools.dia_show:main',
-                 'dia-replace = diatools.dia_replace:main'
+                 'dia-replace = diatools.dia_replace:main',
+                 'dia-search = diatools.dia_mess:main',
                  ]
         }
 

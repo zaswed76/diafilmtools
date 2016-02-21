@@ -3,7 +3,7 @@
 
 import sys
 import re
-from PyQt5 import QtWidgets, QtGui
+from PyQt5 import QtWidgets, QtGui, QtCore
 from diatools import settings
 from diatools.lib import files_tool
 
@@ -31,8 +31,8 @@ def get_message(mess, flag):
         message = "диафльм с текстом - < {} >\nне найден!".format(mess)
     return message, flag
 
-
-
+def to_normalize_text(text):
+    return text.strip()
 
 class Widget(QtWidgets.QMessageBox):
     def __init__(self):
@@ -40,6 +40,7 @@ class Widget(QtWidgets.QMessageBox):
         self.setStyleSheet("background-color: #FAFAFA")
         font = QtGui.QFont("Helvetica", 22)
         self.setFont(font)
+        self.setTextInteractionFlags(QtCore.Qt.TextSelectableByMouse)
 
     def set_text(self, text, flag):
         if flag:
@@ -55,7 +56,7 @@ def main():
     widg = Widget()
     widg.show()
     clipboard = QtWidgets.QApplication.clipboard()
-    originalText = clipboard.text()
+    originalText = to_normalize_text(clipboard.text())
     sett= settings.Settings()
     conf = sett.config()
     path_pcl = conf["data"]

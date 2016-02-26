@@ -11,12 +11,22 @@ def miniature_data(path):
     db_obj = files_tool.Pickle(path)
     return db_obj.load()
 
+def compare_re(p, s):
+    return p.search(s)
+
+def pattern_re(p):
+    return re.compile(p, re.IGNORECASE)
+
+def pattern_levenshtein(name):
+    return name
+
+
 def search_diafilm(db, name):
     lst = []
 
-    p = re.compile(name, re.IGNORECASE)
+    p = pattern_re(name)
     for dia in db.keys():
-        if p.search(dia):
+        if compare_re(p, dia):
             lst.append(dia)
     if lst:
         return "\n".join(lst), True
